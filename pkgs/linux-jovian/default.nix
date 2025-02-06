@@ -3,9 +3,9 @@
 let
   inherit (lib) versions;
 
-  kernelVersion = "6.8.12";
-  vendorVersion = "valve12-jovian1";
-  hash = "sha256-W8/DzuIGRpzcHCN+qiH8GZB6Z3eZqONvN++e9bcg7wA=";
+  kernelVersion = "6.11.11";
+  vendorVersion = "valve4";
+  hash = "sha256-XElnjNEbjqCQiK9GPdlMk8y4O4XAn+UCkEle4sT979w=";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -111,12 +111,16 @@ buildLinux (args // rec {
     # kernel as a guest, so this also clears out a whole bunch of
     # virtualization-specific drivers.
     HYPERVISOR_GUEST = lib.mkForce no;
-    PARAVIRT_TIME_ACCOUNTING = lib.mkForce (option no);
 
     # Disable some options enabled in ArchLinux 6.1.12-arch1 config
-    X86_AMD_PSTATE = lib.mkForce no;
-    # Jovian: meh
+    # Jovian: actually ends up set in the final kernel
+    # X86_AMD_PSTATE = lib.mkForce no;
+    # Jovian: we don't enable this before 6.12
     # CONFIG_HAVE_RUST=n
+  
+    # This has been disabled upstream since 6.11.8-arch1
+    # See: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/commit/1a06ca984333093fb12cbbff275da31fa2bc5f6c
+    ZSWAP_DEFAULT_ON = yes;
 
     # Build as module to experiment with toggling
     TCG_TPM = module;
@@ -135,18 +139,20 @@ buildLinux (args // rec {
     SCHED_CLASS_EXT = yes;
 
     # Disable call depth tracking speculative execution vulnerability mitigation
-    CALL_DEPTH_TRACKING = no;
+    # Jovian: renamed
+    MITIGATION_CALL_DEPTH_TRACKING = no;
 
     # Jovian: fix fallout from the vendor-set options
-    DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_AMD_DC_DCN = lib.mkForce (option no);
     DRM_AMD_DC_HDCP = lib.mkForce (option no);
-    FB_HYPERV = lib.mkForce (option no);
+    DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_HYPERV = lib.mkForce (option no);
     DRM_VMWGFX_FBCON = lib.mkForce (option no);
+    FB_HYPERV = lib.mkForce (option no);
+    INTEL_TDX_GUEST = lib.mkForce (option no);
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
-    INTEL_TDX_GUEST = lib.mkForce (option no);
+    PARAVIRT_TIME_ACCOUNTING = lib.mkForce (option no);
     TDX_GUEST_DRIVER = lib.mkForce (option no);
   };
 
