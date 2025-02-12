@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.12-1.1"
 atomupd-daemon.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.79-1.7"
+bluez.check = "5.79-1.8"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -54,6 +54,9 @@ clang.check = "18.1.8-4.2"
 
 # unused
 debos-git.ignore = true
+
+# A/B stuff
+desync.ignore = true
 
 # enables SteamOS A/B stuff
 discover.check = "6.2.2-1.1"
@@ -229,7 +232,7 @@ pacman-contrib.ignore = true
 paru.ignore = true
 
 # we ship a newer version, but patches may be valuable
-pipewire.check = "1:1.2.6-1.2"
+pipewire.check = "1:1.2.6-1.3"
 
 # builds from master branch for Qt6
 # FIXME: do we want this?
@@ -265,7 +268,7 @@ renderdoc-minimal.ignore = true
 rtl88x2ce-dkms.ignore = true
 
 # not used yet
-scx-scheds.check = "1.0.7.linux.neptune.68-1"
+scx-scheds.check = "1.0.9.linux.neptune.611-1"
 
 # FIXME: package this
 steam-im-modules.ignore = true
