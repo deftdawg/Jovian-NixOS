@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   resholve,
   writeText,
@@ -109,13 +110,13 @@ let
   };
 in stdenv.mkDerivation(finalAttrs: {
   pname = "gamescope-session";
-  version = "3.16.1-3";
+  version = "3.16.1-4";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "jupiter-main/gamescope-${finalAttrs.version}";
-    hash = "sha256-ZS4Zu7JZnejsoKkS1PAk0Vv7T6H92OSAzzQofbndeeQ=";
+    hash = "sha256-PpMoCVoA+1qCvI3yXAlPh2CKSsCiYh8aNHbuPw8A0es=";
   };
 
   patches = [
@@ -136,7 +137,14 @@ in stdenv.mkDerivation(finalAttrs: {
     # substituteInPlace gamescope-xbindkeys.service --replace-fail /usr/bin ${xbindkeys}/bin
     substituteInPlace ibus-gamescope.service --replace-fail /usr/bin ${ibus}/bin
     substituteInPlace powerbuttond.service --replace-fail /usr/lib/hwsupport/powerbuttond ${powerbuttond}/bin/powerbuttond
-    substituteInPlace steam-launcher.service --replace-fail /usr/lib $out/lib
+
+    # can't resholve systemd units :(
+    substituteInPlace steam-launcher.service \
+      --replace-fail /usr/lib $out/lib \
+      --replace-fail /bin/bash ${lib.getExe bash} \
+      --replace-fail kill ${lib.getExe' util-linux "kill"} \
+      --replace-fail pgrep ${lib.getExe' procps "pgrep"}
+
     substituteInPlace steam-notif-daemon.service --replace-fail /usr/bin ${steam_notif_daemon}/bin
   '';
 
