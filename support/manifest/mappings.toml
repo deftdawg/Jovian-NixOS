@@ -201,7 +201,7 @@ linux-neptune-rtw-debug.ignore = true
 linux-neptune-68.ignore = true
 
 # new kernel
-linux-neptune-611.ignore = { map = "linux_jovian", pkgrel = 1 }
+linux-neptune-611 = { map = "linux_jovian", pkgrel = 1 }
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
@@ -215,7 +215,7 @@ mangohud.check = "0.7.2.rc3.r11.g31f2ca5-2.3"
 # we take upstream patches and apply on top of our mesa
 mesa.check = "24.3.4.197725.radeonsi_24.3.4-1"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1", fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "2", fixup = "mesa" }
 
 # some old test thing
 mesa-unstable.ignore = true
@@ -331,7 +331,7 @@ steamos-systemreport.ignore = true
 steamos-tweak-mtu-probing.check = "1-1"
 
 # SteamOS A/B specific patch
-systemd.check = "256.7-1.2"
+systemd.check = "257.2-1.1"
 
 # lul
 ttf-twemoji-default.ignore = true
