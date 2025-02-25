@@ -51,7 +51,7 @@ in
 
       environment.systemPackages = [ pkgs.gamescope pkgs.gamescope-session pkgs.steamos-polkit-helpers pkgs.steamos-manager ];
 
-      systemd.packages = [ pkgs.gamescope-session pkgs.steamos-manager ];
+      systemd.packages = [ pkgs.gamescope-session pkgs.powerbuttond pkgs.steamos-manager ];
 
       # Vendor patch: https://raw.githubusercontent.com/Jovian-Experiments/PKGBUILDs-mirror/cdaeca26642d59fc9109e98ac9ce2efe5261df1b/0001-Add-systemd-service.patch
       systemd.user.services.wakehook = {
@@ -64,6 +64,11 @@ in
       };
 
       systemd.user.services.steamos-manager = {
+        overrideStrategy = "asDropin";
+        wantedBy = [ "gamescope-session.service" ];
+      };
+
+      systemd.user.services.steamos-powerbuttond = {
         overrideStrategy = "asDropin";
         wantedBy = [ "gamescope-session.service" ];
       };

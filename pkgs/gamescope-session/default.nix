@@ -20,7 +20,6 @@
   ibus,
   kdePackages,
   mangohud,
-  powerbuttond,
   procps,
   steam_notif_daemon,
   systemd,
@@ -110,13 +109,13 @@ let
   };
 in stdenv.mkDerivation(finalAttrs: {
   pname = "gamescope-session";
-  version = "3.16.1-4";
+  version = "3.16.1-5";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "jupiter-main/gamescope-${finalAttrs.version}";
-    hash = "sha256-PpMoCVoA+1qCvI3yXAlPh2CKSsCiYh8aNHbuPw8A0es=";
+    hash = "sha256-O/IcJupEZpXeNWFDBPjGD3tYNz0t+5FItC0VNKkHf6c=";
   };
 
   patches = [
@@ -136,7 +135,6 @@ in stdenv.mkDerivation(finalAttrs: {
     # Jovian: we're not going to install this
     # substituteInPlace gamescope-xbindkeys.service --replace-fail /usr/bin ${xbindkeys}/bin
     substituteInPlace ibus-gamescope.service --replace-fail /usr/bin ${ibus}/bin
-    substituteInPlace powerbuttond.service --replace-fail /usr/lib/hwsupport/powerbuttond ${powerbuttond}/bin/powerbuttond
 
     # can't resholve systemd units :(
     substituteInPlace steam-launcher.service \
@@ -171,7 +169,6 @@ in stdenv.mkDerivation(finalAttrs: {
     install -D -m 644 gamescope-session.target $out/lib/systemd/user/gamescope-session.target
     install -D -m 644 gamescope-mangoapp.service $out/lib/systemd/user/gamescope-mangoapp.service
     install -D -m 644 ibus-gamescope.service  $out/lib/systemd/user/ibus-gamescope.service 
-    install -D -m 644 powerbuttond.service $out/lib/systemd/user/powerbuttond.service
     install -D -m 644 steam-launcher.service $out/lib/systemd/user/steam-launcher.service
     install -D -m 644 steam-notif-daemon.service $out/lib/systemd/user/steam-notif-daemon.service
     # Jovian: don't install this, it's not useful for us
