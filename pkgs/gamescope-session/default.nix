@@ -109,13 +109,13 @@ let
   };
 in stdenv.mkDerivation(finalAttrs: {
   pname = "gamescope-session";
-  version = "3.16.1-5";
+  version = "3.16.1-6";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "jupiter-main/gamescope-${finalAttrs.version}";
-    hash = "sha256-O/IcJupEZpXeNWFDBPjGD3tYNz0t+5FItC0VNKkHf6c=";
+    hash = "sha256-EAcWXwHfAYnJ1PzYf/CPJ3OpOPq9jQLehcGOWgznqmM=";
   };
 
   patches = [
@@ -143,6 +143,7 @@ in stdenv.mkDerivation(finalAttrs: {
       --replace-fail kill ${lib.getExe' util-linux "kill"} \
       --replace-fail pgrep ${lib.getExe' procps "pgrep"}
 
+    substituteInPlace steam-short-session-tracker.service --replace-fail /usr/lib $out/lib
     substituteInPlace steam-notif-daemon.service --replace-fail /usr/bin ${steam_notif_daemon}/bin
   '';
 
@@ -170,6 +171,7 @@ in stdenv.mkDerivation(finalAttrs: {
     install -D -m 644 gamescope-mangoapp.service $out/lib/systemd/user/gamescope-mangoapp.service
     install -D -m 644 ibus-gamescope.service  $out/lib/systemd/user/ibus-gamescope.service 
     install -D -m 644 steam-launcher.service $out/lib/systemd/user/steam-launcher.service
+    install -D -m 644 steam-short-session-tracker.service $out/lib/systemd/user/steam-short-session-tracker.service
     install -D -m 644 steam-notif-daemon.service $out/lib/systemd/user/steam-notif-daemon.service
     # Jovian: don't install this, it's not useful for us
     # install -D -m 644 gamescope-xbindkeys.service $out/lib/systemd/user/gamescope-xbindkeys.service
