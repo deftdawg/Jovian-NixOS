@@ -235,7 +235,7 @@ pacman-contrib.ignore = true
 paru.ignore = true
 
 # we ship a newer version, but patches may be valuable
-pipewire.check = "1:1.2.6-1.3"
+pipewire.check = "1:1.2.6-1.4"
 
 # builds from master branch for Qt6
 # FIXME: do we want this?
