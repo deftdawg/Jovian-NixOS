@@ -215,7 +215,7 @@ mangohud.check = "0.7.2.rc3.r11.g31f2ca5-2.3"
 # we take upstream patches and apply on top of our mesa
 mesa.check = "24.3.4.197725.radeonsi_24.3.4-2"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "5", fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1", fixup = "mesa" }
 
 # some old test thing
 mesa-unstable.ignore = true
@@ -242,7 +242,7 @@ pipewire.check = "1:1.2.7-1.1"
 plasma-remotecontrollers.check = "5.26.90.r256.g8daeecc-1"
 
 # packaging changes for SteamOS A/B
-plasma-workspace.check = "6.2.5-1.1"
+plasma-workspace.check = "6.2.5-1.2"
 
 # some weird patches, but nothing too relevant
 plymouth.check = "22.02.122-1.6"
@@ -354,7 +354,7 @@ vpower.ignore = true
 
 wakehook = { map = true, pkgrel = 1 }
 
-wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.4" }
+wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.1" }
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
