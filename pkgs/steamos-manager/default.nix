@@ -1,7 +1,7 @@
 {
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   jupiter-hw-support,
   jovian-stubs,
   steamos-polkit-helpers,
@@ -15,24 +15,24 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "steamos-manager";
-  version = "25.1.1";
+  version = "25.3.1";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "steamos-manager";
     rev = "v${version}";
-    hash = "sha256-cF5E9dE0lxj4WLT3+L0s8UG/r51ymSP+VGBcY79Y0OQ=";
+    hash = "sha256-oclgieBcEPknkhHJduSzvcSx1PvUA5YtFZOy3I39waE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pu+tjUcg81voPErYBJA8gwPGLZJebTkYytiJSJi4MVk=";
+  cargoHash = "sha256-sxM6UHZPN/bu/Rgoc62hzem7POGyb8iE9CHDDU23gMs=";
 
   # tests assume Steam Deck hardware and FHS paths
   doCheck = false;
 
   patches = [ 
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch
+    {
       stubs = jovian-stubs;
       steamDeckFirmware = steamdeck-firmware;
       jupiterDockUpdaterBin = jupiter-dock-updater-bin;
@@ -41,21 +41,24 @@ rustPlatform.buildRustPackage rec {
       iwd = iwd;
       traceCmd = trace-cmd;
       iw = iw;
+      out = null;
     })
     # FIXME: build steamos-log-submitter and reenable this maybe?
     ./disable-ftrace.patch
   ];
 
   postPatch = ''
-    substituteInPlace src/daemon/{root,user}.rs src/platform.rs --replace-fail "/usr/share" "$out/share"
+    substituteInPlace \
+      src/daemon/{root,user}.rs \
+      src/platform.rs \
+      data/*/*.service \
+      --replace-fail "@out@" "$out"
   '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
   postInstall = ''
-    substituteInPlace data/*/*.service --replace-fail "/usr/lib" "$out/bin"
-
     install -d -m0755 "$out/share/dbus-1/services/"
     install -d -m0755 "$out/share/dbus-1/system-services/"
     install -d -m0755 "$out/share/dbus-1/system.d/"

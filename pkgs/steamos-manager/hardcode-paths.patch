@@ -1,5 +1,5 @@
 diff --git a/data/platforms/jupiter.toml b/data/platforms/jupiter.toml
-index fd43cc5..66edccd 100644
+index 4278ee7..59fdc38 100644
 --- a/data/platforms/jupiter.toml
 +++ b/data/platforms/jupiter.toml
 @@ -1,27 +1,27 @@
@@ -7,54 +7,115 @@ index fd43cc5..66edccd 100644
 -script  = "/usr/bin/steamos-reset-tool"
 +script  = "@stubs@/bin/steamos-reset-tool"
  script_args = ["factory-reset", "--reset-all"]
-
+ 
  [factory_reset.os]
 -script  = "/usr/bin/steamos-reset-tool"
 +script  = "@stubs@/bin/steamos-reset-tool"
  script_args = ["factory-reset", "--reset-os"]
-
+ 
  [factory_reset.user]
 -script  = "/usr/bin/steamos-reset-tool"
 +script  = "@stubs@/bin/steamos-reset-tool"
  script_args = ["factory-reset", "--reset-user-data"]
-
+ 
  [update_bios]
 -script = "/usr/bin/jupiter-biosupdate"
 +script = "@steamDeckFirmware@/bin/jupiter-biosupdate"
  script_args = ["--auto"]
-
+ 
  [update_dock]
 -script = "/usr/lib/jupiter-dock-updater/jupiter-dock-updater.sh"
 +script = "@jupiterDockUpdaterBin@/jupiter-dock-updater/jupiter-dock-updater.sh"
-
+ 
  [storage.trim_devices]
 -script = "/usr/lib/hwsupport/trim-devices.sh"
 +script = "@hwsupport@/lib/hwsupport/trim-devices.sh"
-
+ 
  [storage.format_device]
 -script = "/usr/lib/hwsupport/format-device.sh"
 +script = "@hwsupport@/lib/hwsupport/format-device.sh"
  label_flag = "--label"
  device_flag = "--device"
  no_validate_flag = "--skip-validation"
-diff --git a/src/hardware.rs b/src/hardware.rs
-index b3b80bd..e227bbf 100644
---- a/src/hardware.rs
-+++ b/src/hardware.rs
-@@ -97,7 +97,7 @@ pub(crate) async fn is_deck() -> Result<bool> {
- pub(crate) async fn check_support() -> Result<HardwareCurrentlySupported> {
-     // Run jupiter-check-support note this script does exit 1 for "Support: No" case
-     // so no need to parse output, etc.
--    let res = script_exit_code("/usr/bin/jupiter-check-support", &[] as &[String; 0]).await?;
-+    let res = script_exit_code("@hwsupport@/bin/jupiter-check-support", &[] as &[String; 0]).await?;
-
-     Ok(match res {
-         0 => HardwareCurrentlySupported::Supported,
+diff --git a/data/system/com.steampowered.SteamOSManager1.service b/data/system/com.steampowered.SteamOSManager1.service
+index 792ea8d..0088dc3 100644
+--- a/data/system/com.steampowered.SteamOSManager1.service
++++ b/data/system/com.steampowered.SteamOSManager1.service
+@@ -1,5 +1,5 @@
+ [D-BUS Service]
+ Name=com.steampowered.SteamOSManager1
+-Exec=/usr/lib/steamos-manager -r
++Exec=@out@/lib/steamos-manager -r
+ User=root
+ SystemdService=steamos-manager.service
+diff --git a/data/system/steamos-manager.service b/data/system/steamos-manager.service
+index 1e21630..fda4ee6 100644
+--- a/data/system/steamos-manager.service
++++ b/data/system/steamos-manager.service
+@@ -7,7 +7,7 @@ After=steamos-log-submitter.service
+ Type=dbus
+ BusName=com.steampowered.SteamOSManager1
+ Environment=RUST_LOG='INFO'
+-ExecStart=/usr/lib/steamos-manager -r
++ExecStart=@out@/lib/steamos-manager -r
+ Restart=on-failure
+ RestartSec=1
+ 
+diff --git a/data/user/com.steampowered.SteamOSManager1.service b/data/user/com.steampowered.SteamOSManager1.service
+index fccfb36..f6a0d20 100644
+--- a/data/user/com.steampowered.SteamOSManager1.service
++++ b/data/user/com.steampowered.SteamOSManager1.service
+@@ -1,6 +1,6 @@
+ [D-BUS Service]
+ Name=com.steampowered.SteamOSManager1
+-Exec=/usr/lib/steamos-manager
++Exec=@out@/lib/steamos-manager
+ User=root
+ SystemdService=steamos-manager.service
+ 
+diff --git a/data/user/steamos-manager.service b/data/user/steamos-manager.service
+index c147e40..d32e118 100644
+--- a/data/user/steamos-manager.service
++++ b/data/user/steamos-manager.service
+@@ -6,6 +6,6 @@ After=gamescope.service
+ Type=dbus
+ BusName=com.steampowered.SteamOSManager1
+ Environment=RUST_LOG='INFO'
+-ExecStart=/usr/lib/steamos-manager
++ExecStart=@out@/lib/steamos-manager
+ Restart=on-failure
+ RestartSec=1
+diff --git a/src/daemon/root.rs b/src/daemon/root.rs
+index 400ce81..48b629f 100644
+--- a/src/daemon/root.rs
++++ b/src/daemon/root.rs
+@@ -104,7 +104,7 @@ impl DaemonContext for RootContext {
+     }
+ 
+     fn system_config_path(&self) -> Result<PathBuf> {
+-        Ok(path("/usr/share/steamos-manager/system.d"))
++        Ok(path("@out@/share/steamos-manager/system.d"))
+     }
+ 
+     fn state(&self) -> RootState {
+diff --git a/src/daemon/user.rs b/src/daemon/user.rs
+index b8a1237..f9c8cb1 100644
+--- a/src/daemon/user.rs
++++ b/src/daemon/user.rs
+@@ -62,7 +62,7 @@ impl DaemonContext for UserContext {
+     }
+ 
+     fn system_config_path(&self) -> Result<PathBuf> {
+-        Ok(path("/usr/share/steamos-manager/user.d"))
++        Ok(path("@out@/share/steamos-manager/user.d"))
+     }
+ 
+     fn state(&self) -> UserState {
 diff --git a/src/manager/root.rs b/src/manager/root.rs
-index 821ffcb..c317d4c 100644
+index e0dd091..53a0739 100644
 --- a/src/manager/root.rs
 +++ b/src/manager/root.rs
-@@ -158,7 +158,7 @@ impl SteamOSManager {
+@@ -160,7 +160,7 @@ impl SteamOSManager {
          };
          for index in indices {
              let result = script_output(
@@ -63,12 +124,25 @@ index 821ffcb..c317d4c 100644
                  &["-s", index],
              )
              .await;
+diff --git a/src/platform.rs b/src/platform.rs
+index c8a8808..781b00d 100644
+--- a/src/platform.rs
++++ b/src/platform.rs
+@@ -142,7 +142,7 @@ impl PlatformConfig {
+             _ => return Ok(None),
+         };
+         let config = read_to_string(format!(
+-            "/usr/share/steamos-manager/platforms/{platform}.toml"
++            "@out@/share/steamos-manager/platforms/{platform}.toml"
+         ))
+         .await?;
+         Ok(Some(toml::from_str(config.as_ref())?))
 diff --git a/src/wifi.rs b/src/wifi.rs
-index cde865e..512f1ed 100644
+index ac2594d..9ae6a57 100644
 --- a/src/wifi.rs
 +++ b/src/wifi.rs
 @@ -32,19 +32,18 @@ use crate::{path, read_config_directory};
-
+ 
  const OVERRIDE_CONTENTS: &str = "[Service]
  ExecStart=
 -ExecStart=/usr/lib/iwd/iwd -d
@@ -76,28 +150,33 @@ index cde865e..512f1ed 100644
  ";
  const OVERRIDE_FOLDER: &str = "/etc/systemd/system/iwd.service.d";
  const OVERRIDE_PATH: &str = "/etc/systemd/system/iwd.service.d/99-valve-override.conf";
-
+ 
  // Only use one path for output for now. If needed we can add a timestamp later
  // to have multiple files, etc.
 -const TRACE_CMD_PATH: &str = "/usr/bin/trace-cmd";
 +const TRACE_CMD_PATH: &str = "@traceCmd@/bin/trace-cmd";
-
+ 
  const MIN_BUFFER_SIZE: u32 = 100;
-
+ 
  const WIFI_BACKEND_PATHS: &[&str] = &[
 -    "/usr/lib/NetworkManager/conf.d",
      "/etc/NetworkManager/conf.d",
  ];
-
-@@ -233,7 +232,7 @@ pub(crate) async fn get_wifi_backend() -> Result<WifiBackend> {
+ 
+@@ -233,11 +232,11 @@ pub(crate) async fn get_wifi_backend() -> Result<WifiBackend> {
  }
-
+ 
  pub(crate) async fn set_wifi_backend(backend: WifiBackend) -> Result<()> {
 -    run_script("/usr/bin/steamos-wifi-set-backend", &[backend.to_string()]).await
 +    run_script("@stubs@/bin/steamos-wifi-set-backend", &[backend.to_string()]).await
  }
-
+ 
  pub(crate) async fn list_wifi_interfaces() -> Result<Vec<String>> {
+-    let output = script_output("/usr/bin/iw", &["dev"]).await?;
++    let output = script_output("@iw@/bin/iw", &["dev"]).await?;
+     Ok(output
+         .lines()
+         .filter_map(|line| match line.trim().split_once(' ') {
 @@ -251,7 +250,7 @@ pub(crate) async fn get_wifi_power_management_state() -> Result<WifiPowerManagem
      let mut found_any = false;
      for iface in list_wifi_interfaces().await? {
@@ -107,3 +186,12 @@ index cde865e..512f1ed 100644
          for line in output.lines() {
              match line.trim() {
                  "Power save: on" => return Ok(WifiPowerManagement::Enabled),
+@@ -272,7 +271,7 @@ pub(crate) async fn set_wifi_power_management_state(state: WifiPowerManagement)
+ 
+     for iface in list_wifi_interfaces().await? {
+         run_script(
+-            "/usr/bin/iw",
++            "@iw@/bin/iw",
+             &["dev", iface.as_str(), "set", "power_save", state],
+         )
+         .await
