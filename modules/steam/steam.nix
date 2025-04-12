@@ -78,6 +78,8 @@ in
 
       systemd.services.steamos-manager = {
         overrideStrategy = "asDropin";
+        # FIXME: should probably be done upstream
+        after = [ "inputplumber.service" ];
         path = [
           # .../lib/hwsupport/format-device.sh makes an unqualified `umount` call.
           "/run/wrappers/"
