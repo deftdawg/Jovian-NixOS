@@ -31,6 +31,10 @@ rec {
   };
   gamescope-session = final.callPackage ./pkgs/gamescope-session { };
 
+  inputplumber = final.callPackage ./pkgs/inputplumber {
+    inputplumber' = prev.inputplumber;
+  };
+
   mangohud = final.callPackage ./pkgs/mangohud {
     mangohud' = prev.mangohud;
   };
