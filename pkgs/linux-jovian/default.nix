@@ -103,6 +103,9 @@ buildLinux (args // rec {
     LENOVO_WMI_GAMEZONE = module;
     LENOVO_WMI_TUNING = module;
 
+    ZOTAC_ZONE_HID = module;
+    ZOTAC_ZONE_PLATFORM = module;
+
     # PARAVIRT options have overhead, even on bare metal boots. They can cause
     # spinlocks to not be inlined as well. Either way, we don't intend to run this
     # kernel as a guest, so this also clears out a whole bunch of
