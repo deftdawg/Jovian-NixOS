@@ -356,7 +356,7 @@ vpower.ignore = true
 
 wakehook = { map = true, pkgrel = 1 }
 
-wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.1" }
+wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.2" }
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
