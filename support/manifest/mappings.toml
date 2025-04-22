@@ -93,7 +93,7 @@ galileo-mura = { map = true, pkgrel = 2, fixup = "v" }
 gamescope.map = ["gamescope", "gamescope-session"]
 
 # only there to split out locales
-glibc.check = "2.40+r16+gaa533d58ff-2"
+glibc.check = "2.41+r47+g046b33800c3e-1"
 
 # FIXME: dev tool
 gpu-trace.ignore = true
@@ -110,7 +110,7 @@ holo-earlyoom.check = "1.0-1"
 holo-fstab-repair.check = "0.1-1"
 
 # the split out locales
-holo-glibc-locales.check = "2.40+r16+gaa533d58ff-2"
+holo-glibc-locales.check = "2.41+r47+g046b33800c3e-2"
 
 # we don't use those repos
 holo-keyring.ignore = true
