@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   pkg-config,
   libevdev,
   udev,
@@ -20,9 +20,8 @@ stdenv.mkDerivation(finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./jovian.patch {
       handler = jovian-steam-protocol-handler;
-      src = ./jovian.patch;
     })
   ];
 

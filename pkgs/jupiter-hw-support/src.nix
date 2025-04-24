@@ -1,7 +1,7 @@
 { 
   stdenv, 
   fetchFromGitHub, 
-  substituteAll, 
+  replaceVars, 
   jovian-steam-protocol-handler, 
   systemd,
 }:
@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./automount-fix-system-paths.patch {
       handler = jovian-steam-protocol-handler;
       systemd = systemd;
-      src = ./automount-fix-system-paths.patch;
     })
     # Remove `deck` username assumption
     ./0001-Jovian-Ensure-automounting-works-for-any-UID-1000-us.patch
