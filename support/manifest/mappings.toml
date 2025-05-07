@@ -149,9 +149,6 @@ jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steam
 
 jupiter-legacy-support.check = "1.154-1"
 
-# devkit stuff
-jupiter-resolved-nomdns.ignore = true
-
 # Valve telemetry stuff
 jupiter-steamos-log-submitter.ignore = true
 
