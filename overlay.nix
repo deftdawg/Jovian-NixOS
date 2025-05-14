@@ -21,9 +21,8 @@ rec {
 
   galileo-mura = final.callPackage ./pkgs/galileo-mura { };
 
-  gamescope = import ./pkgs/gamescope {
+  gamescope = final.callPackage ./pkgs/gamescope {
     gamescope' = prev.gamescope;
-    inherit (final) fetchFromGitHub;
   };
   gamescope-wsi = gamescope.override {
     enableExecutable = false;
