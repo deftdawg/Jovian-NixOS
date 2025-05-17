@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "steamos-manager";
-  version = "25.5.1";
+  version = "25.5.2";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "steamos-manager";
     rev = "v${version}";
-    hash = "sha256-agIo9XxrFjrG6hsezaAYx2v4BtfX1Nzmm5FcBXAnTGA=";
+    hash = "sha256-L5lM7qWjDaoKFLn1W7OCQc3SNDregcTwkaF02e38apQ=";
   };
 
-  cargoHash = "sha256-F0KhdviwpoNqygoUqqb/f7oKgB7vADsqPztAoyZie6k=";
+  cargoHash = "sha256-JVnVPoxedyZFZslJhFC2fs/YFDQEWRnQgMaNWcQzfVE=";
 
   # tests assume Steam Deck hardware and FHS paths
   doCheck = false;
