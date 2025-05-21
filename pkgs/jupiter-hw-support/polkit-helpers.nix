@@ -36,9 +36,9 @@ let
     ];
     execer = [
       "cannot:${dmidecode}/bin/dmidecode"
-      "cannot:${jovian-stubs}/bin/jupiter-biosupdate"
       "cannot:${jovian-stubs}/bin/steamos-reboot"
       "cannot:${jovian-stubs}/bin/steamos-factory-reset-config"
+      "cannot:${jovian-stubs}/bin/steamos-firmware-update"
       "cannot:${jovian-stubs}/bin/steamos-select-branch"
       "cannot:${jovian-stubs}/bin/steamos-update"
       "cannot:${jupiter-dock-updater-bin}/lib/jupiter-dock-updater/jupiter-dock-updater.sh"
@@ -59,6 +59,7 @@ let
       "/usr/bin/jupiter-biosupdate" = true;
       "/usr/bin/jupiter-check-support" = true;
       "/usr/bin/steamos-factory-reset-config" = true;
+      "/usr/bin/steamos-firmware-update" = true;
       "/usr/bin/steamos-reboot" = true;
       "/usr/bin/steamos-select-branch" = true;
       "/usr/bin/steamos-update" = true;
