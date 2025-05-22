@@ -201,7 +201,7 @@ linux-neptune-rtw-debug.ignore = true
 linux-neptune-68.ignore = true
 
 # new kernel
-linux-neptune-611 = { map = "linux_jovian", pkgrel = 3 }
+linux-neptune-611 = { map = "linux_jovian", pkgrel = 1 }
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
