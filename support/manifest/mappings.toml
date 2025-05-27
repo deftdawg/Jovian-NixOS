@@ -364,6 +364,8 @@ wakehook = { map = true, pkgrel = 1 }
 
 wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.2" }
 
+xdg-desktop-portal-gamescope = { map = true, pkgrel = 1 }
+
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
 

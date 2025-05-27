@@ -32,6 +32,7 @@ rec {
     enableWsi = true;
   };
   gamescope-session = final.callPackage ./pkgs/gamescope-session { };
+  xdg-desktop-portal-gamescope = final.callPackage ./pkgs/xdg-desktop-portal-gamescope { };
 
   inputplumber = final.callPackage ./pkgs/inputplumber {
     inputplumber' = prev.inputplumber;
