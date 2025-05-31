@@ -1,5 +1,5 @@
 diff --git a/data/platforms/jupiter.toml b/data/platforms/jupiter.toml
-index 4278ee7..59fdc38 100644
+index 881ebb8..c8b7871 100644
 --- a/data/platforms/jupiter.toml
 +++ b/data/platforms/jupiter.toml
 @@ -1,27 +1,27 @@
@@ -38,7 +38,7 @@ index 4278ee7..59fdc38 100644
  device_flag = "--device"
  no_validate_flag = "--skip-validation"
 diff --git a/data/system/com.steampowered.SteamOSManager1.service b/data/system/com.steampowered.SteamOSManager1.service
-index 792ea8d..68d5183 100644
+index 792ea8d..0088dc3 100644
 --- a/data/system/com.steampowered.SteamOSManager1.service
 +++ b/data/system/com.steampowered.SteamOSManager1.service
 @@ -1,5 +1,5 @@
@@ -49,7 +49,7 @@ index 792ea8d..68d5183 100644
  User=root
  SystemdService=steamos-manager.service
 diff --git a/data/system/steamos-manager.service b/data/system/steamos-manager.service
-index 1e21630..111630e 100644
+index 1e21630..fda4ee6 100644
 --- a/data/system/steamos-manager.service
 +++ b/data/system/steamos-manager.service
 @@ -7,7 +7,7 @@ After=steamos-log-submitter.service
@@ -62,7 +62,7 @@ index 1e21630..111630e 100644
  RestartSec=1
  
 diff --git a/data/user/com.steampowered.SteamOSManager1.service b/data/user/com.steampowered.SteamOSManager1.service
-index fccfb36..e563b8a 100644
+index fccfb36..f6a0d20 100644
 --- a/data/user/com.steampowered.SteamOSManager1.service
 +++ b/data/user/com.steampowered.SteamOSManager1.service
 @@ -1,6 +1,6 @@
@@ -73,8 +73,22 @@ index fccfb36..e563b8a 100644
  User=root
  SystemdService=steamos-manager.service
  
+diff --git a/data/user/orca.service b/data/user/orca.service
+index a378a66..ebe7313 100644
+--- a/data/user/orca.service
++++ b/data/user/orca.service
+@@ -3,7 +3,7 @@ Description=Orca Screen Reader
+ 
+ [Service]
+ Type=simple
+-ExecStart=/usr/bin/orca
+-ExecReload=/usr/bin/orca --replace
++ExecStart=@orca@/bin/orca
++ExecReload=@orca@/bin/orca --replace
+ Restart=on-failure
+ EnvironmentFile=%t/gamescope-environment
 diff --git a/data/user/steamos-manager.service b/data/user/steamos-manager.service
-index c147e40..d97c77e 100644
+index c147e40..d32e118 100644
 --- a/data/user/steamos-manager.service
 +++ b/data/user/steamos-manager.service
 @@ -6,6 +6,6 @@ After=gamescope.service
@@ -86,10 +100,10 @@ index c147e40..d97c77e 100644
  Restart=on-failure
  RestartSec=1
 diff --git a/src/daemon/root.rs b/src/daemon/root.rs
-index 400ce81..48b629f 100644
+index e0204a8..82946bd 100644
 --- a/src/daemon/root.rs
 +++ b/src/daemon/root.rs
-@@ -104,7 +104,7 @@ impl DaemonContext for RootContext {
+@@ -105,7 +105,7 @@ impl DaemonContext for RootContext {
      }
  
      fn system_config_path(&self) -> Result<PathBuf> {
@@ -99,10 +113,10 @@ index 400ce81..48b629f 100644
  
      fn state(&self) -> RootState {
 diff --git a/src/daemon/user.rs b/src/daemon/user.rs
-index b8a1237..f9c8cb1 100644
+index c5db378..502db4f 100644
 --- a/src/daemon/user.rs
 +++ b/src/daemon/user.rs
-@@ -62,7 +62,7 @@ impl DaemonContext for UserContext {
+@@ -67,7 +67,7 @@ impl DaemonContext for UserContext {
      }
  
      fn system_config_path(&self) -> Result<PathBuf> {
@@ -112,10 +126,10 @@ index b8a1237..f9c8cb1 100644
  
      fn state(&self) -> UserState {
 diff --git a/src/manager/root.rs b/src/manager/root.rs
-index e0dd091..53a0739 100644
+index 9971811..ea0ac99 100644
 --- a/src/manager/root.rs
 +++ b/src/manager/root.rs
-@@ -160,7 +160,7 @@ impl SteamOSManager {
+@@ -172,7 +172,7 @@ impl SteamOSManager {
          };
          for index in indices {
              let result = script_output(
@@ -125,10 +139,10 @@ index e0dd091..53a0739 100644
              )
              .await;
 diff --git a/src/platform.rs b/src/platform.rs
-index c8a8808..781b00d 100644
+index ad24c78..29fc4ef 100644
 --- a/src/platform.rs
 +++ b/src/platform.rs
-@@ -142,7 +142,7 @@ impl PlatformConfig {
+@@ -173,7 +173,7 @@ impl PlatformConfig {
              _ => return Ok(None),
          };
          let config = read_to_string(format!(
@@ -138,7 +152,7 @@ index c8a8808..781b00d 100644
          .await?;
          Ok(Some(toml::from_str(config.as_ref())?))
 diff --git a/src/wifi.rs b/src/wifi.rs
-index ac2594d..9ae6a57 100644
+index 679b06f..e5041cc 100644
 --- a/src/wifi.rs
 +++ b/src/wifi.rs
 @@ -32,19 +32,18 @@ use crate::{path, read_config_directory};
@@ -163,7 +177,7 @@ index ac2594d..9ae6a57 100644
      "/etc/NetworkManager/conf.d",
  ];
  
-@@ -233,11 +232,11 @@ pub(crate) async fn get_wifi_backend() -> Result<WifiBackend> {
+@@ -228,11 +227,11 @@ pub(crate) async fn get_wifi_backend() -> Result<WifiBackend> {
  }
  
  pub(crate) async fn set_wifi_backend(backend: WifiBackend) -> Result<()> {
@@ -177,7 +191,7 @@ index ac2594d..9ae6a57 100644
      Ok(output
          .lines()
          .filter_map(|line| match line.trim().split_once(' ') {
-@@ -251,7 +250,7 @@ pub(crate) async fn get_wifi_power_management_state() -> Result<WifiPowerManagem
+@@ -246,7 +245,7 @@ pub(crate) async fn get_wifi_power_management_state() -> Result<WifiPowerManagem
      let mut found_any = false;
      for iface in list_wifi_interfaces().await? {
          let output =
@@ -186,7 +200,7 @@ index ac2594d..9ae6a57 100644
          for line in output.lines() {
              match line.trim() {
                  "Power save: on" => return Ok(WifiPowerManagement::Enabled),
-@@ -272,7 +271,7 @@ pub(crate) async fn set_wifi_power_management_state(state: WifiPowerManagement)
+@@ -267,7 +266,7 @@ pub(crate) async fn set_wifi_power_management_state(state: WifiPowerManagement)
  
      for iface in list_wifi_interfaces().await? {
          run_script(
