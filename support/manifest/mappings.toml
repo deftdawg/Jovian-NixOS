@@ -165,6 +165,9 @@ kdumpst.ignore = true
 # just packaging changes
 kmod.check = "33-3.2"
 
+# backports from 6.4
+kscreen.check = "6.2.5-2"
+
 # special hack to allow Steam input without a prompt, can be done better in 6.3
 kwin.check = "6.2.5-1.2"
 
