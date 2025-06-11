@@ -6,10 +6,10 @@
 { steam-unwrapped', fetchurl }:
 
 let
-  bootstrapVersion = "1.0.0.81-2.4";
+  bootstrapVersion = "1.0.0.81-2.5";
   bundle = fetchurl {
     url = "https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/steam-jupiter-stable-${bootstrapVersion}.src.tar.gz";
-    hash = "sha256-nWo50DmTPIr1BvZMNxpRZDzU1vMJp2tMNnZ/p+ICFD4=";
+    hash = "sha256-NZR4eQEhZ2WQSmL/orCDazOT7JcL06eYVj6HntwFiZQ=";
   };
 in steam-unwrapped'.overrideAttrs (old: {
   pname = "steam-jupiter-unwrapped";

@@ -103,6 +103,7 @@ in
       ];
 
       # From steam-jupiter
+      # FIXME: investigate LED stuff
       services.udev.extraRules = ''
         # USB devices and topological children
         SUBSYSTEMS=="usb", TAG+="uaccess"
