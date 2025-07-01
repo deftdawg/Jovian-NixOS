@@ -60,6 +60,7 @@ python3.pkgs.buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "aiohttp-cors"
+    "packaging"
     "watchdog"
   ];
 
