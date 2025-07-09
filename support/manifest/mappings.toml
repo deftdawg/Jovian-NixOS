@@ -158,6 +158,8 @@ jupiter-steamos-log-submitter.ignore = true
 # FIXME: what is this?
 jupiter-validation-tools.ignore = true
 
+jq.ignore = true
+
 # debug stuff
 kdump-steamos.ignore = true
 kdumpst.ignore = true
