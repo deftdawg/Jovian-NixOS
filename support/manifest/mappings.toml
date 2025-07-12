@@ -214,6 +214,9 @@ linux-neptune-68.ignore = true
 # new kernel
 linux-neptune-611 = { map = "linux_jovian", pkgrel = 1 }
 
+# newer kernel
+linux-neptune-615.check = "6.15.6.valve1.rc1-1"
+
 # we don't identify as SteamOS
 lsb-release.ignore = true
 
