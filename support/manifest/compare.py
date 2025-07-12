@@ -86,7 +86,7 @@ def fixup_v_version(local: str, remote: str) -> tuple[str, str]:
 
 
 def fixup_mesa_version(local: str, remote: str) -> tuple[str, str]:
-    remote = re.sub(r'([\d.]+)_devel\.[\d]+\.steamos_([\d.]+)-(\d+)', r'\1.steamos-\2-\3', remote)
+    remote = re.sub(r'([\d.]+)(_devel)?\.[\d]+\.(steamos|radeonsi)_([\d.]+)-(\d+)', r'\1.\3-\4-\5', remote)
     return local, remote
 
 
