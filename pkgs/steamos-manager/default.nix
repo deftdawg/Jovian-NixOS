@@ -15,21 +15,22 @@
   wrapGAppsNoGuiHook,
   glib,
   gsettings-desktop-schemas,
+  speechd-minimal,
   udev,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "steamos-manager";
-  version = "25.6.1";
+  version = "25.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.steamos.cloud";
     owner = "holo";
     repo = "steamos-manager";
     rev = "v${version}";
-    hash = "sha256-PCh+vxswKs82f2Wp5vZRPS0IFIaktNoxQG1BXr3JiF4=";
+    hash = "sha256-wM6+12HJleYOkBaWcTjj08Qs62Pof3CSm0Dl7tCf/1M=";
   };
 
-  cargoHash = "sha256-zb3y6X2T3quAVwNSKRYroZbpSvml72n1PkJGiX5OQuA=";
+  cargoHash = "sha256-J8RMiPWGDo7oOKWA3ql/D9d3jP4CVi/AJch9eio/prI=";
 
   # tests assume Steam Deck hardware and FHS paths
   doCheck = false;
@@ -54,9 +55,9 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace \
-      src/daemon/{root,user}.rs \
-      src/hardware.rs \
-      src/platform.rs \
+      steamos-manager/src/daemon/{root,user}.rs \
+      steamos-manager/src/hardware.rs \
+      steamos-manager/src/platform.rs \
       data/*/*.service \
       --replace-warn "@out@" "$out"
   '';
@@ -64,14 +65,16 @@ rustPlatform.buildRustPackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    pkg-config
     glib
+    pkg-config
+    rustPlatform.bindgenHook
     wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     glib
     gsettings-desktop-schemas
+    speechd-minimal
     udev
   ];
 

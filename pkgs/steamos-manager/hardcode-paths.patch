@@ -100,11 +100,11 @@ index de25c51..8d4f397 100644
  Restart=on-failure
  RestartSec=1
  EnvironmentFile=%t/gamescope-environment
-diff --git a/src/daemon/root.rs b/src/daemon/root.rs
-index e0204a8..82946bd 100644
---- a/src/daemon/root.rs
-+++ b/src/daemon/root.rs
-@@ -105,7 +105,7 @@ impl DaemonContext for RootContext {
+diff --git a/steamos-manager/src/daemon/root.rs b/steamos-manager/src/daemon/root.rs
+index 47fcb01..8598b05 100644
+--- a/steamos-manager/src/daemon/root.rs
++++ b/steamos-manager/src/daemon/root.rs
+@@ -108,7 +108,7 @@ impl DaemonContext for RootContext {
      }
  
      fn system_config_path(&self) -> Result<PathBuf> {
@@ -112,12 +112,12 @@ index e0204a8..82946bd 100644
 +        Ok(path("@out@/share/steamos-manager/system.d"))
      }
  
-     fn state(&self) -> RootState {
-diff --git a/src/daemon/user.rs b/src/daemon/user.rs
-index 80fd3d1..0f3683f 100644
---- a/src/daemon/user.rs
-+++ b/src/daemon/user.rs
-@@ -67,7 +67,7 @@ impl DaemonContext for UserContext {
+     fn state(&self) -> &RootState {
+diff --git a/steamos-manager/src/daemon/user.rs b/steamos-manager/src/daemon/user.rs
+index 4826c75..5054543 100644
+--- a/steamos-manager/src/daemon/user.rs
++++ b/steamos-manager/src/daemon/user.rs
+@@ -69,7 +69,7 @@ impl DaemonContext for UserContext {
      }
  
      fn system_config_path(&self) -> Result<PathBuf> {
@@ -125,11 +125,11 @@ index 80fd3d1..0f3683f 100644
 +        Ok(path("@out@/share/steamos-manager/user.d"))
      }
  
-     fn state(&self) -> UserState {
-diff --git a/src/hardware.rs b/src/hardware.rs
-index 661984a..ffc028f 100644
---- a/src/hardware.rs
-+++ b/src/hardware.rs
+     fn state(&self) -> &UserState {
+diff --git a/steamos-manager/src/hardware.rs b/steamos-manager/src/hardware.rs
+index e6d1276..018bf3c 100644
+--- a/steamos-manager/src/hardware.rs
++++ b/steamos-manager/src/hardware.rs
 @@ -31,7 +31,7 @@ const SYS_VENDOR_PATH: &str = "/sys/class/dmi/id/sys_vendor";
  const BOARD_NAME_PATH: &str = "/sys/class/dmi/id/board_name";
  const PRODUCT_NAME_PATH: &str = "/sys/class/dmi/id/product_name";
@@ -137,13 +137,13 @@ index 661984a..ffc028f 100644
 -const DEVICE_CONFIG_PATH: &str = "/usr/share/steamos-manager/devices";
 +const DEVICE_CONFIG_PATH: &str = "@out@/share/steamos-manager/devices";
  #[cfg(test)]
- const DEVICE_CONFIG_PATH: &str = "data/devices";
+ const DEVICE_CONFIG_PATH: &str = "../data/devices";
  
-diff --git a/src/manager/root.rs b/src/manager/root.rs
-index 88ad1c7..de613e3 100644
---- a/src/manager/root.rs
-+++ b/src/manager/root.rs
-@@ -173,7 +173,7 @@ impl SteamOSManager {
+diff --git a/steamos-manager/src/manager/root.rs b/steamos-manager/src/manager/root.rs
+index 9b1d564..e71b439 100644
+--- a/steamos-manager/src/manager/root.rs
++++ b/steamos-manager/src/manager/root.rs
+@@ -174,7 +174,7 @@ impl SteamOSManager {
          };
          for index in indices {
              let result = script_output(
@@ -152,23 +152,39 @@ index 88ad1c7..de613e3 100644
                  &["-s", index],
              )
              .await;
-diff --git a/src/platform.rs b/src/platform.rs
-index cc4f897..040a3ed 100644
---- a/src/platform.rs
-+++ b/src/platform.rs
-@@ -173,7 +173,7 @@ impl FormatDeviceConfig {
+diff --git a/steamos-manager/src/manager/user.rs b/steamos-manager/src/manager/user.rs
+index 0557e88..87c7779 100644
+--- a/steamos-manager/src/manager/user.rs
++++ b/steamos-manager/src/manager/user.rs
+@@ -1164,10 +1164,7 @@ pub(crate) async fn create_interfaces(
+     }
+ 
+     object_server.at(MANAGER_PATH, manager2).await?;
+-
+-    if try_exists(path("/usr/bin/orca")).await? {
+-        object_server.at(MANAGER_PATH, screen_reader).await?;
+-    }
++    object_server.at(MANAGER_PATH, screen_reader).await?;
+ 
+     if !list_wifi_interfaces().await.unwrap_or_default().is_empty() {
+         object_server
+diff --git a/steamos-manager/src/platform.rs b/steamos-manager/src/platform.rs
+index 4476d15..017a825 100644
+--- a/steamos-manager/src/platform.rs
++++ b/steamos-manager/src/platform.rs
+@@ -175,7 +175,7 @@ impl FormatDeviceConfig {
  impl PlatformConfig {
      #[cfg(not(test))]
      async fn load() -> Result<Option<PlatformConfig>> {
--        let config = read_to_string("/usr/share/steamos-manager/platform.toml").await?;
-+        let config = read_to_string("@out@/share/steamos-manager/platform.toml").await?;
-         Ok(Some(toml::from_str(config.as_ref())?))
-     }
- 
-diff --git a/src/wifi.rs b/src/wifi.rs
+-        let path = "/usr/share/steamos-manager/platform.toml";
++        let path = "@out@/share/steamos-manager/platform.toml";
+         let config = read_to_string(path)
+             .await
+             .with_context(|| format!("Failed to read {path}"))?;
+diff --git a/steamos-manager/src/wifi.rs b/steamos-manager/src/wifi.rs
 index 679b06f..e5041cc 100644
---- a/src/wifi.rs
-+++ b/src/wifi.rs
+--- a/steamos-manager/src/wifi.rs
++++ b/steamos-manager/src/wifi.rs
 @@ -32,19 +32,18 @@ use crate::{path, read_config_directory};
  
  const OVERRIDE_CONTENTS: &str = "[Service]
