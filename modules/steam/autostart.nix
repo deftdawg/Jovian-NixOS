@@ -81,6 +81,15 @@ in
       systemd.user.services.gamescope-session = {
         overrideStrategy = "asDropin";
 
+        unitConfig = {
+          StartLimitIntervalSec = 120;
+          StartLimitBurst = 5;
+        };
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
+
         environment = mkMerge (
           [
             {
